@@ -375,7 +375,7 @@ header .logo{
 
 /* Estilo sección Sobre Nosotros */
 .about-us {
-    background: #f3f0e7;  /* color suave */
+    background: #ffffff;  /* color suave */
     padding: 2rem 2.5rem;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
