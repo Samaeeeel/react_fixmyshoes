@@ -1,76 +1,224 @@
-/* admin.css */
+/* Estilo general */
+body {
+  font-family: 'Aboreto', sans-serif;
+  background-color: #f9f4ed;
+  margin: 0;
+}
+
 .admin-panel {
   padding: 1rem;
-  font-family: sans-serif;
-  max-width: 1200px;
+  max-width: 1300px;
   margin: auto;
+  background: #fefaf4;
 }
 
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
-nav#menuAdmin {
-  display: flex;
-  gap: 0.5rem;
-  margin: 1rem 0;
+header h1 {
+  font-size: 1.8rem;
+  color: #7b4a2c;
 }
 
-nav#menuAdmin button {
-  padding: 0.5rem 1rem;
+.cerrar-sesion {
+  background-color: #a67843;
+  color: #fff;
+  padding: 0.6rem 1.3rem;
   border: none;
-  background-color: #ccc;
+  border-radius: 20px;
+  font-weight: bold;
   cursor: pointer;
-  border-radius: 5px;
 }
 
-nav#menuAdmin button.active {
-  background-color: #333;
+/* Navegación */
+#menuAdmin {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+#menuAdmin button {
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 1.5rem;
+  background-color: #e4c8a4;
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#menuAdmin button.active {
+  background-color: #a67843;
   color: white;
+}
+
+/* Tabla */
+.tabla-scroll {
+  overflow-x: auto;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
+  font-size: 1rem;
+}
+
+thead {
+  background-color: #a67843;
+  color: white;
 }
 
 th, td {
-  border: 1px solid #aaa;
-  padding: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
   text-align: left;
 }
 
-button {
-  margin-right: 0.3rem;
+tbody tr:nth-child(odd) {
+  background-color: #fef9f3;
 }
 
+tbody tr:nth-child(even) {
+  background-color: #f3e6d6;
+}
+
+/* Botones */
+.btn-agregar {
+  background-color: #4f8b69;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.acciones button {
+  margin-right: 0.3rem;
+  margin-bottom: 0.3rem;
+  border: none;
+  border-radius: 12px;
+  padding: 0.4rem 0.9rem;
+  font-weight: bold;
+  font-family: 'Aboreto';
+  cursor: pointer;
+}
+
+.btn-editar {
+  background-color: #8b5e3c;
+  color: white;
+}
+
+.btn-eliminar {
+  background-color: #c94c4c;
+  color: white;
+}
+
+.btn-estado {
+  background-color: #558b6e;
+  color: white;
+}
+
+/* Modal */
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.5);
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 999;
 }
 
 .modal-content {
-  background: white;
-  padding: 1rem;
-  border-radius: 10px;
-  width: 400px;
-  max-height: 90%;
-  overflow-y: auto;
+  background-color: #fffdf9;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: #7b4a2c;
+  text-align: center;
+}
+
+.modal-content form label {
+  display: block;
+  margin: 1rem 0 0.3rem;
+  font-weight: bold;
+  color: #555;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.btn-submit {
+  margin-top: 1.5rem;
+  background-color: #4f8b69;
+  color: white;
+  padding: 0.7rem;
+  border: none;
+  width: 100%;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .close {
-  float: right;
-  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 18px;
   font-size: 1.5rem;
-  margin-top: -10px;
+  font-weight: bold;
+  color: #a67843;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .tabla-scroll {
+    overflow-x: auto;
+  }
+
+  table {
+    font-size: 0.9rem;
+  }
+
+  #menuAdmin {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .acciones button {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.3rem;
+  }
+
+  .cerrar-sesion {
+    align-self: flex-end;
+  }
 }
