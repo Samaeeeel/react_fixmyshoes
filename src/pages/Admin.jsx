@@ -11,6 +11,8 @@ export default function AdminPanel() {
   const [editId, setEditId] = useState(null);
   const [data, setData] = useState({ usuarios: [], clientes: [], productos: [], facturas: [], detalles: [] });
   const [imagenes, setImagenes] = useState([]);
+  const [facturaEditando, setFacturaEditando] = useState(null);
+  const [nuevoEstado, setNuevoEstado] = useState('');
 
   useEffect(() => {
     cargarDatos(section);
@@ -144,15 +146,31 @@ export default function AdminPanel() {
     }
   };
 
-  const editarEstadoFactura = async (factura) => {
-    const nuevoEstado = prompt('Nuevo estado:', factura.estado);
-    if (!nuevoEstado || nuevoEstado === factura.estado) return;
-    await fetch(`${apiBase}/facturas/${factura.idFactura}`, {
+  const editarEstadoFactura = (factura) => {
+    setFacturaEditando(factura);
+    setNuevoEstado(factura.estado);
+  };
+
+  const guardarNuevoEstado = async () => {
+    if (!nuevoEstado || !facturaEditando) return;
+
+    const facturaActualizada = {
+      ...facturaEditando,
+      estado: nuevoEstado
+    };
+
+    const res = await fetch(`${apiBase}/facturas/${facturaEditando.idFactura}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...factura, estado: nuevoEstado })
+      body: JSON.stringify(facturaActualizada)
     });
-    cargarDatos('facturas');
+
+    if (res.ok) {
+      cargarDatos('facturas');
+      setFacturaEditando(null);
+    } else {
+      alert('Error al actualizar el estado.');
+    }
   };
 
   const editarDetalleFactura = async (detalle) => {
@@ -205,7 +223,20 @@ export default function AdminPanel() {
                         <button className="btn-eliminar" onClick={() => handleDelete(item[campos[section][0]])}>Eliminar</button>
                       </>
                     )}
-                    {section === 'facturas' && <button className="btn-estado" onClick={() => editarEstadoFactura(item)}>Editar Estado</button>}
+                    {section === 'facturas' && (
+                      facturaEditando?.idFactura === item.idFactura ? (
+                        <div>
+                          <select value={nuevoEstado} onChange={(e) => setNuevoEstado(e.target.value)}>
+                            <option value="Creado">Creado</option>
+                            <option value="Pagado">Pagado</option>
+                            <option value="Cancelado">Cancelado</option>
+                          </select>
+                          <button className="btn-submit" onClick={guardarNuevoEstado}>Guardar</button>
+                        </div>
+                      ) : (
+                        <button className="btn-estado" onClick={() => editarEstadoFactura(item)}>Editar Estado</button>
+                      )
+                    )}
                     {section === 'detalles' && <button className="btn-estado" onClick={() => editarDetalleFactura(item)}>Editar Cantidad</button>}
                   </td>
                 </tr>
