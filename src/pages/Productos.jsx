@@ -5,14 +5,21 @@ const Productos = () => {
   const [productos, setProductos] = useState([]);
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const apiBaseUrl = 'https://fixmyshoesadmin.runasp.net';
 
   useEffect(() => {
     fetch(`${apiBaseUrl}/api/productos`)
       .then(res => res.json())
-      .then(data => setProductos(data))
-      .catch(err => console.error('Error cargando productos:', err));
+      .then(data => {
+        setProductos(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error cargando productos:', err);
+        setLoading(false);
+      });
   }, []);
 
   const abrirModal = (producto) => {
@@ -59,25 +66,35 @@ const Productos = () => {
       <Header />
       <main className="container" style={{ padding: '2rem', maxWidth: '1200px', margin: 'auto' }}>
         <h1>Productos Disponibles</h1>
-        <section id="productosGrid" className="productos-grid">
-          {productos.map((prod) => {
-            const urlImagen = Array.isArray(prod.prodImg) && prod.prodImg.length > 0
-              ? prod.prodImg[0]
-              : '/images/default.png';
 
-            return (
-              <div key={prod.idProducto} className="producto-card">
-                <img src={urlImagen} alt={prod.prodNombre} className="producto-imagen" />
-                <h3 className="producto-nombre">{prod.prodNombre}</h3>
-                <p className="producto-descripcion">{prod.prodDescripcion}</p>
-                <p className="producto-precio">${Number(prod.prodPrecio).toFixed(2)}</p>
-                <button className="btn-ver-detalles" onClick={() => abrirModal(prod)}>
-                  Ver detalles
-                </button>
-              </div>
-            );
-          })}
-        </section>
+        {loading ? (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '3rem' }}>
+            <div className="spinner"></div>
+            <p style={{ marginTop: '1rem', fontSize: '1.2rem', color: '#a67843' }}>
+              Cargando productos...
+            </p>
+          </div>
+        ) : (
+          <section id="productosGrid" className="productos-grid">
+            {productos.map((prod) => {
+              const urlImagen = Array.isArray(prod.prodImg) && prod.prodImg.length > 0
+                ? prod.prodImg[0]
+                : '/images/default.png';
+
+              return (
+                <div key={prod.idProducto} className="producto-card">
+                  <img src={urlImagen} alt={prod.prodNombre} className="producto-imagen" />
+                  <h3 className="producto-nombre">{prod.prodNombre}</h3>
+                  <p className="producto-descripcion">{prod.prodDescripcion}</p>
+                  <p className="producto-precio">${Number(prod.prodPrecio).toFixed(2)}</p>
+                  <button className="btn-ver-detalles" onClick={() => abrirModal(prod)}>
+                    Ver detalles
+                  </button>
+                </div>
+              );
+            })}
+          </section>
+        )}
 
         {/* Modal */}
         {mostrarModal && productoSeleccionado && (
@@ -96,6 +113,22 @@ const Productos = () => {
           </div>
         )}
       </main>
+
+      {/* Spinner styles */}
+      <style>{`
+        .spinner {
+          border: 6px solid #eee;
+          border-top: 6px solid #a67843;
+          border-radius: 50%;
+          width: 50px;
+          height: 50px;
+          animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
     </>
   );
 };
